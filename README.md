@@ -1,6 +1,8 @@
 # smartBot
 smartCitizen Bot
 
+
+
 # crear Conda en Linux
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
 chmod +x Miniconda3-latest-Linux-x86_64.sh
@@ -18,6 +20,7 @@ https://developer.smartcitizen.me/
 
 # Telegram Bot
 https://python-telegram-bot.org/
+
 https://core.telegram.org/bots/api
 @BotFather
 
