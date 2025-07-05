@@ -3,7 +3,8 @@ import oscP5.*;
 import netP5.*;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
-String apiUrl = "https://api.telegram.org/bot7747284015:AAFhUe52apCgfXwYak5MSjNbXBhieh8GGzg";
+//String apiUrl = "https://api.telegram.org/bot7747284015:AAFhUe52apCgfXwYak5MSjNbXBhieh8GGzg"
+String apiUrl = "https://api.telegram.org/bot7980483937:AAHUBgSNxiRrDNMTLNFppktwbeMkcLIJhHk";
 int lastUpdateId = 0;
 OscP5 oscP5;
 NetAddress remoteLocation;
@@ -45,6 +46,9 @@ void checkForUpdates() {
         OscMessage msg = new OscMessage("/info");
         msg.add(chatId);  // Añadir el chatId al mensaje OSC
         oscP5.send(msg, remoteLocation);
+      }
+      if (text.equals("/hola")) {
+        println("hola");
       }
     }
   }
