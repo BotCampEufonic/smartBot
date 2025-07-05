@@ -3,7 +3,7 @@ import requests
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 # Pega aquí tu token de Bot de Telegram
-TELEGRAM_TOKEN = "7747284015:AAFhUe52apCgfXwYak5MSjNbXBhieh8GGzg"  # Reemplaza con tu token
+TELEGRAM_TOKEN = "7980483937:AAHUBgSNxiRrDNMTLNFppktwbeMkcLIJhHk"  # Reemplaza con tu token
 
 SMARTCITIZEN_URL = "https://api.smartcitizen.me/devices/18831"
 
@@ -23,6 +23,13 @@ def get_smartcitizen_info():
         light = sensors.get("BH1730FVC - Light", "N/A")
         humidity = sensors.get("Sensirion SHT31 - Humidity", "N/A")
         battery = sensors.get("Battery SCK", "N/A")
+        pm1 =sensors.get("Sensirion SEN5X - PM1", "N/A") 
+        pm10 =sensors.get("Sensirion SEN5X - PM10", "N/A")
+        pm25 =sensors.get("Sensirion SEN5X - PM2.5", "N/A")
+         pm40 =sensors.get("Sensirion SEN5X - PM4.0", "N/A")
+        pm05 =sensors.get("Sensirion SEN5X - PN0.5", "N/A")
+       tps =sensors.get("Sensirion SEN5X - TPS", "N/A")
+
 
         info = (
             f"BOT camp: {kit_name}\n"
@@ -34,6 +41,14 @@ def get_smartcitizen_info():
             f"Ruido: {noise} dB\n"
             f"Luz: {light} lux\n"
             f"Humedad: {humidity} %\n"
+f"-----------------\n"
+pm1 =sensors.get("Sensirion SEN5X - PM1", "N/A") 
+        pm10 =sensors.get("Sensirion SEN5X - PM10", "N/A")
+        pm25 =sensors.get("Sensirion SEN5X - PM2.5", "N/A")
+         pm40 =sensors.get("Sensirion SEN5X - PM4.0", "N/A")
+        pm05 =sensors.get("Sensirion SEN5X - PN0.5", "N/A")
+       tps =sensors.get("Sensirion SEN5X - TPS", "N/A")
+
             f"Batería: {battery} %"
         )
         return info
