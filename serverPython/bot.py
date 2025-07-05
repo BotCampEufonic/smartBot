@@ -3,7 +3,7 @@ import requests
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, CallbackContext
 # Pega aquí tu token de Bot de Telegram
-TELEGRAM_TOKEN = "7747284015:AAFhUe52apCgfXwYak5MSjNbXBhieh8GGzg"  # Reemplaza con tu token
+TELEGRAM_TOKEN = "7980483937:AAHUBgSNxiRrDNMTLNFppktwbeMkcLIJhHk"  # Reemplaza con tu token
 
 SMARTCITIZEN_URL = "https://api.smartcitizen.me/devices/18831"
 

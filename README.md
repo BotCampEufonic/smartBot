@@ -21,6 +21,13 @@ https://developer.smartcitizen.me/
 # Telegram Bot
 https://python-telegram-bot.org/
 
+
+Para saber la id del bot, abrimos el bot
+https://t.me/myidbot y ponemos /getid masdenverge2025bot
+4447217
+
+para que queremos 
+
 https://core.telegram.org/bots/api
 @BotFather
 
