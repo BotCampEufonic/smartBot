@@ -8,7 +8,7 @@ from pythonosc.udp_client import SimpleUDPClient
 # --- CONFIGURACIÓN ---
 TELEGRAM_TOKEN = "7980483937:AAHUBgSNxiRrDNMTLNFppktwbeMkcLIJhHk"
 SMARTCITIZEN_URL = "https://api.smartcitizen.me/devices/18831"
-OSC_IP = "192.168.122.204"
+OSC_IP = "192.168.122.24"
 #OSC_IP = "192.168.122.24"
 OSC_PORT = 4560
 osc_client = SimpleUDPClient(OSC_IP, OSC_PORT)
@@ -34,8 +34,8 @@ def fetch_smartcitizen_data():
             "longitude": longitude,
             "last_reading_at": last_reading_at,
             "temperature": sensors.get("Sensirion SHT31 - Temperature", None),
-            "noise": sensors.get("ICS43432 - Noise", None),
-            "light": sensors.get("BH1730FVC - Light", None),
+            "noise": sensors.get("TDK ICS43432 - Noise Level A weighting", None),
+            "light": sensors.get("ROHM - BH1730FVC", None),
             "humidity": sensors.get("Sensirion SHT31 - Humidity", None),
             "battery": sensors.get("Battery SCK", None),
             "pm1": sensors.get("Sensirion SEN5X - PM1", None),

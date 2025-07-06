@@ -17,6 +17,8 @@ jupyter notebook
 
 # documentació smartcitizen 
 https://developer.smartcitizen.me/
+https://github.com/fablabbcn/smartcitizen-kit-2x
+https://github.com/fablabbcn/smartcitizen-toolkit
 
 # Telegram Bot
 https://python-telegram-bot.org/
@@ -32,6 +34,10 @@ https://core.telegram.org/bots/api
 @BotFather
 ## smartcityzen
 https://api.smartcitizen.me/devices/18831
+"SmartCitizen Kit 2.3"
+"sck:2,3
+2.3
+
 
 
 
@@ -44,24 +50,6 @@ https://api.smartcitizen.me/v0/devices/18831
 
 
 masdenverge2025bot
-
-
-
-janebeta7, [5/7/25 13:16]
-/mybots
-
-janebeta7, [5/7/25 13:17]
-/newbot
-
-BotFather, [5/7/25 13:17]
-Alright, a new bot. How are we going to call it? Please choose a name for your bot.
-
-janebeta7, [5/7/25 13:19]
-masdenverge2025bot
-
-
-Use this token to access the HTTP API:
-7980483937:AAHUBgSNxiRrDNMTLNFppktwbeMkcLIJhHk
 
 
 For a description of the Bot API, see this page: https://core.telegram.org/bots/api
