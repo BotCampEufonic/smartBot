@@ -33,65 +33,139 @@ live_loop :osc_pm_10 do
   set :pm_10, val[0] if val.length > 0
 end
 
-live_loop :osc_noise do
+live_loop :osc_noise_receiver do
   use_real_time
   val = sync "/osc*/noise"
   if val.length > 0
-    raw_noise = val[0].to_f
-    noise = [[(raw_noise - 34) / (80.0 - 34), 0].max, 1].min
-    set :noise, noise
+    noise_raw = val[0].to_f
+    # Normalizar a 0..1
+    noise_norm = [[noise_raw / 70.0, 0].max, 1].min
+    set :noise, noise_norm
   end
 end
 
-# Loop con sonido que reacciona al ruido ambiente normalizado
-live_loop :sensor_noise_feedback do
-  use_synth :mod_beep
+
+samples = [
+  :ambi_swoosh,
+  :ambi_drone,
+  :ambi_glass_hum,
+  :ambi_glass_rub,
+  :ambi_haunted_hum,
+  :ambi_piano,
+  :ambi_lunar_land,
+  :ambi_dark_woosh,
+  :ambi_choir,
+  :ambi_sauna
+]
+uncomment do
+  live_loop :bird_sample do
+    noise = get(:noise) || 0.0
+    
+    if noise > 0.2
+      amp = (noise - 0.2) / 0.8 * 1
+      amp = [[amp, 0].max, 1].min
+      
+      chosen_sample = "ru_ecm_90_modular_sfx_loop_dilemma.wav"
+      
+      
+      sample chosen_sample, amp: amp, rate: 16
+      sleep 16
+    else
+      sleep 16
+    end
+  end
+end
+live_loop :bird_sample2 do
+  noise = get(:noise) || 0.0  # noise normalizado 0..1
+  threshold = 0.44
   
-  noise = get(:noise)
+  amp = 0
+  if noise > threshold
+    amp = ((noise - threshold) / (1 - threshold)) ** 1.5
+    amp = [[amp, 0].max, 1].min
+  end
   
-  base_midi = note(:e2)
-  pitch = base_midi + (noise * 24).to_i        # Pitch varía 2 octavas según noise
-  amp = 0.1 + noise * 0.9                       # Amplificación de 0.1 a 1
-  cutoff = 40 + noise * 80                      # Filtro pasa bajos de 40 a 120
-  mod_range = 0.05 + noise * 0.5                # Modulación de 0.05 a 0.55
-  release_time = 0.1 + noise * 0.7              # Release de 0.1 a 0.8 seg
+  samples = [
+    "SPLC-4408_FX_Oneshot_Rainforest_Amb_Morning_Birds_Bugs_Insects_Frogs_Swamp_Marshland.wav",
+    "Tropical_Rainforest/SPLC-4417_FX_Oneshot_Rainforest_Designed_Forest_Bird.wav",
+    "Tropical_Rainforest/SPLC-4416_FX_Oneshot_Rainforest_Designed_Forest_Bird.wav"
+  ]
   
-  play pitch, amp: amp, cutoff: cutoff, mod_range: mod_range, release: release_time
+  chosen_sample = samples.choose
   
-  sleep 0.2
+  sample chosen_sample, amp: amp, rate: 1
+  
+  sleep 16
 end
 
-live_loop :pm_effect do
+
+
+
+
+
+
+use_bpm 140
+comment do
+  live_loop :pm_effect_continuous do
+    pm_1 = get(:pm_1) || 0
+    pm_2 = get(:pm_2) || 0
+    pm_4 = get(:pm_4) || 0
+    pm_10 = get(:pm_10) || 0
+    
+    max_pm = 100.0
+    val_pm_1 = [[pm_1.to_f / max_pm, 0].max, 1].min
+    val_pm_2 = [[pm_2.to_f / max_pm, 0].max, 1].min
+    val_pm_4 = [[pm_4.to_f / max_pm, 0].max, 1].min
+    val_pm_10 = [[pm_10.to_f / max_pm, 0].max, 1].min
+    
+    amp_val = 0.1 + val_pm_4 * 0.2
+    cutoff_val = 60 + val_pm_1 * 60
+    pan_val = -1 + val_pm_2 * 2
+    echo_phase = 0.1 + val_pm_10 * 0.4
+    
+    # Mapea pm_1 a nota entre :e2 (midi 40) y :e4 (midi 64)
+    base_midi = 40
+    top_midi = 64
+    note_midi = (base_midi + val_pm_1 * (top_midi - base_midi)).to_i
+    note = note_midi
+    
+    use_synth :sine
+    
+    with_fx :echo, phase: echo_phase, decay: 2, mix: 0.4 do
+      play note, sustain: 0.5, release: 0, amp: amp_val, pan: pan_val, cutoff: cutoff_val
+      sleep 0.1
+    end
+  end
+end
+live_loop :pm_sampler_melodic do
   pm_1 = get(:pm_1) || 0
   pm_2 = get(:pm_2) || 0
   pm_4 = get(:pm_4) || 0
   pm_10 = get(:pm_10) || 0
   
-  pm_1 = [[pm_1.to_f, 0].max, 500].min
-  pm_2 = [[pm_2.to_f, 0].max, 500].min
-  pm_4 = [[pm_4.to_f, 0].max, 500].min
-  pm_10 = [[pm_10.to_f, 0].max, 500].min
-  
   max_pm = 500.0
+  val_pm_1 = [[pm_1.to_f / max_pm, 0].max, 1].min
+  val_pm_2 = [[pm_2.to_f / max_pm, 0].max, 1].min
+  val_pm_4 = [[pm_4.to_f / max_pm, 0].max, 1].min
+  val_pm_10 = [[pm_10.to_f / max_pm, 0].max, 1].min
   
-  val_pm_1 = [[pm_1 / max_pm, 0].max, 1].min
-  cutoff_val = 60 + val_pm_1 * 60
+  total_cont = val_pm_1 + val_pm_2 + val_pm_4 + val_pm_10
+  total_cont = [[total_cont / 4.0, 0].max, 1].min
   
-  val_pm_2 = [[pm_2 / max_pm, 0].max, 1].min
-  res_val = 0.1 + val_pm_2 * 0.8
+  base_midi = 72
+  top_midi = 84
+  note_midi = (base_midi + val_pm_2 * (top_midi - base_midi)).to_i
   
-  val_pm_4 = [[pm_4 / max_pm, 0].max, 1].min
-  amp_val = 0.1 + val_pm_4 * 0.7
+  amp_val = 0.2 + val_pm_4 * 0.6
+  rate_val = 0.9 + val_pm_4 * 0.1
   
-  val_pm_10 = [[pm_10 / max_pm, 0].max, 1].min
-  echo_time = 0.1 + val_pm_10 * 0.4
-  
-  with_fx :echo, phase: echo_time, decay: 2, mix: 0.4 do
-    with_fx :lpf, cutoff: cutoff_val, res: res_val do
-      use_synth :prophet
-      play :e2, release: 0.3, amp: amp_val
-      sleep 0.3
+  with_fx :reverb, room: 0.6, mix: 0.3 do
+    with_fx :bitcrusher do
+      with_fx :wobble, phase: 4 + total_cont * 8 do
+        sample :loop_tabla, note: note_midi, amp: amp_val, rate: rate_val
+      end
     end
   end
+  
+  sleep 1
 end
-
